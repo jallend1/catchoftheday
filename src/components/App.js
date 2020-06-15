@@ -7,6 +7,13 @@ import sampleFishes from '../sample-fishes';
 import base from '../base';
 
 class App extends React.Component {
+    constructor(){
+        super();
+        this.addFish = this.addFish.bind(this);
+        this.updateFish = this.updateFish.bind(this);
+        this.loadSampleFish = this.loadSampleFish.bind(this);
+        this.addToOrder = this.addToOrder.bind(this);
+    }
     state = {
         fishes: {},
         order: {}
@@ -23,7 +30,6 @@ class App extends React.Component {
         });
     }
     componentDidUpdate(){
-        console.log(this.state.order)
         localStorage.setItem(this.props.match.params.storeId, JSON.stringify(this.state.order))
     }
     componentWillUnmount(){
@@ -35,6 +41,11 @@ class App extends React.Component {
         this.setState({
             fishes
         });
+    }
+    updateFish(key, updatedFish){
+        const fishes = {...this.state.fishes};
+        fishes[key] = updatedFish;
+        this.setState({fishes})
     }
     
     addToOrder = key => {
@@ -64,7 +75,7 @@ class App extends React.Component {
                     </ul>
                 </div>
                     <Order order={this.state.order} fishes={this.state.fishes} />
-                    <Inventory addFish={this.addFish} loadSampleFish={this.loadSampleFish} />
+                    <Inventory fishes={this.state.fishes} addFish={this.addFish} loadSampleFish={this.loadSampleFish} updateFish={this.updateFish} />
             </div>
         )
     }
